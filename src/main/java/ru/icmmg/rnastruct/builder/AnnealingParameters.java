@@ -9,6 +9,7 @@ public class AnnealingParameters {
     private long numberIterationToStop;
     private long tempKoeff;
     private long rsTimeLimit;
+    private boolean enableOpenedEnding;
     private long k1;
     private long k2;
     private long k3;
@@ -91,5 +92,13 @@ public class AnnealingParameters {
 
     public void setK3(long k3) {
         this.k3 = k3;
+    }
+
+    public boolean isEnableOpenedEnding() {
+        return enableOpenedEnding;
+    }
+
+    public void setEnableOpenedEnding(boolean enableOpenedEnding) {
+        this.enableOpenedEnding = enableOpenedEnding;
     }
 }

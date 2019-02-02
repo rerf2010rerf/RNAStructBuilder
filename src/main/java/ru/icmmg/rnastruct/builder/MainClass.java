@@ -1,43 +1,45 @@
 package ru.icmmg.rnastruct.builder;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class MainClass {
 
-    private static final String DEFAULT_PATTERN = "RNA_TREE_BEGIN\\n\" +\n" +
-            "            \"F\\n\" +\n" +
-            "            \" E              len:0..30\\n\" +\n" +
-            "            \" S[m]              len:3..30     msl:30\\n\" +\n" +
-            "            \"  L              len:0..30\\n\" +\n" +
-            "            \"  S              len:3..30       msl:30\\n\" +\n" +
-            "            \"   L              len:0..30   \\n\" +\n" +
-            "            \"   S              len:3..30     msl:30\\n\" +\n" +
-            "            \"    L              len:3..30\\n\" +\n" +
-            "            \"   L              len:0..30\\n\" +\n" +
-            "            \"  L              len:0..30\\n\" +\n" +
-            "            \" E              len:0..30\\n\" +\n" +
-            "            \"RNA_TREE_END\\n\" +\n" +
-            "            \"PSEUDOKNOTS_BEGIN\\n\" +\n" +
-            "            \"PSEUDOKNOTS_END";
+    private static final String DEFAULT_PATTERN = "RNA_TREE_BEGIN\n" +
+            "F\n" +
+            " E              len:0..30\n" +
+            " S[m]              len:3..30     msl:30\n" +
+            "  L              len:0..30\n" +
+            "  S              len:3..30       msl:30\n" +
+            "   L              len:0..30   \n" +
+            "   S              len:3..30     msl:30\n" +
+            "    L              len:3..30\n" +
+            "   L              len:0..30\n" +
+            "  L              len:0..30\n" +
+            " E              len:0..30\n" +
+            "RNA_TREE_END\n" +
+            "PSEUDOKNOTS_BEGIN\n" +
+            "PSEUDOKNOTS_END";
 
-    private static final Pattern RS_DIR = Pattern.compile("-rscanDir:([^\\s]?)");
-    private static final Pattern RS_CONFIG_FILE = Pattern.compile("-rscanConfigFile:([^\\s]?)");
-    private static final Pattern SEQ_FILE = Pattern.compile("-seqFile:([^\\s]?)");
-    private static final Pattern SEQ_NUMBER = Pattern.compile("-minSeqs:([^\\s]?)");
-    private static final Pattern ITERATION_TO_STOP = Pattern.compile("-iterationToStop:([^\\s]?)");
-    private static final Pattern TEMP_KOEFF = Pattern.compile("-temperatureKoeff:([^\\s]?)");
-    private static final Pattern RS_TIME_LIMIT = Pattern.compile("-rscanTimeLimit:([^\\s]?)");
-    private static final Pattern ENERGY_KOEFF = Pattern.compile("-energyKoeff:([^\\s]?)");
-    private static final Pattern TIME_KOEFF = Pattern.compile("-timeKoeff:([^\\s]?)");
-    private static final Pattern NUMBER_KOEFF = Pattern.compile("-numberKoeff:([^\\s]?)");
-    private static final Pattern LOG_FILE_NAME = Pattern.compile("-logFile:([^\\s]?)");
-    private static final Pattern INITIAL_PATTERN_FILE = Pattern.compile("-initialPatternFile:([^\\s]?)");
-    private static final Pattern RESULT_FILE = Pattern.compile("-resultFile:([^\\s]?)");
+    private static final Pattern RS_DIR = Pattern.compile("-rscanDir:([^\\s]+)");
+    private static final Pattern RS_CONFIG_FILE = Pattern.compile("-rscanConfigFile:([^\\s]+)");
+    private static final Pattern SEQ_FILE = Pattern.compile("-seqFile:([^\\s]+)");
+    private static final Pattern SEQ_NUMBER = Pattern.compile("-minSeqs:([^\\s]+)");
+    private static final Pattern ITERATION_TO_STOP = Pattern.compile("-iterationToStop:([^\\s]+)");
+    private static final Pattern TEMP_KOEFF = Pattern.compile("-temperatureKoeff:([^\\s]+)");
+    private static final Pattern RS_TIME_LIMIT = Pattern.compile("-rscanTimeLimit:([^\\s]+)");
+    private static final Pattern ENERGY_KOEFF = Pattern.compile("-energyKoeff:([^\\s]+)");
+    private static final Pattern TIME_KOEFF = Pattern.compile("-timeKoeff:([^\\s]+)");
+    private static final Pattern NUMBER_KOEFF = Pattern.compile("-numberKoeff:([^\\s]+)");
+    private static final Pattern LOG_FILE_NAME = Pattern.compile("-logFile:([^\\s]+)");
+    private static final Pattern INITIAL_PATTERN_FILE = Pattern.compile("-initialPatternFile:([^\\s]+)");
+    private static final Pattern RESULT_FILE = Pattern.compile("-resultFile:([^\\s]+)");
 
     public static void main(String[] args) throws Exception {
         AnnealingParameters params = parseCommandLine(args);
@@ -107,6 +109,8 @@ public class MainClass {
 
         Long numberKoeff = findNumericValue("-numberKoeff", NUMBER_KOEFF, args);
         params.setK3(numberKoeff != null ? numberKoeff : 10);
+
+        params.setEnableOpenedEnding(Arrays.asList(args).contains("-enableOpenedEnding"));
 
         return params;
     }
